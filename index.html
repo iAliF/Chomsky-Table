@@ -2,25 +2,91 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chomsky</title>
+    <title>Chomsky Table</title>
+
+    <style>
+        table {
+            width: 50%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        td, th {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
-
 <div id="app">
-    <h1>Hello {{ name }}</h1>
+    <h1>Grammar:</h1>
+    <p v-for="(value, key) in grammar" :key="key">
+        {{ key }} → {{ value.join(" | ") }}
+    </p>
+
+    <h1>Sentence:</h1>
+    <input v-model="sentence" type="text">
+    <button @click="calculate">Calculate</button>
+
+    <table v-if="done">
+        <tr v-for="(row, rowIndex) in table" :key="'row-' + rowIndex">
+            <td v-for="(cell, columnIndex) in row" :key="'cell-' + columnIndex">
+                {{ cell.join(", ") }}
+            </td>
+        </tr>
+    </table>
 </div>
+
 <script>
-    const {createApp} = Vue
+    const {createApp} = Vue;
 
     createApp({
         data() {
             return {
-                name: "Chomsky"
-            }
-        }
-    }).mount('#app')
+                grammar: {
+                    S: ["AS", "SS", "a"],
+                    A: ["a", "b", "AB", "BA"],
+                    B: ["b", "CD"],
+                    C: ["c", "SA"],
+                    D: ["d"],
+                },
+                sentence: "aabcda",
+                table: [],
+                done: false,
+            };
+        },
+        methods: {
+            calculate() {
+                this.done = false;
+
+                const n = this.sentence.length;
+                let table = Array.from(
+                    {length: n},
+                    () => Array.from({length: n}, () => [])
+                );
+
+                // Qotr asli
+                for (let i = 0; i < n; i++) {
+                    let word = this.sentence[i];
+
+                    for (let name in this.grammar) {
+                        this.grammar[name].forEach(
+                            value => {
+                                if (value === word)
+                                    table[i][i].push(name);
+                            }
+                        );
+                    }
+                }
+
+                this.table = table;
+                this.done = true;
+            },
+        },
+    }).mount("#app");
 </script>
 </body>
 </html>
