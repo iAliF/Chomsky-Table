@@ -34,7 +34,7 @@
     <table v-if="done">
         <tr v-for="(row, rowIndex) in table" :key="'row-' + rowIndex">
             <td v-for="(cell, columnIndex) in row" :key="'cell-' + columnIndex">
-                {{ cell.join(", ") }}
+                {{ cell.length > 0 ? cell.sort().join(", ") : "∅" }}
             </td>
         </tr>
     </table>
@@ -48,7 +48,7 @@
             return {
                 grammar: {
                     S: ["AS", "SS", "a"],
-                    A: ["a", "b", "AB", "BA"],
+                    A: ["a", "b", "BA", "BB"],
                     B: ["b", "CD"],
                     C: ["c", "SA"],
                     D: ["d"],
@@ -68,18 +68,46 @@
                     () => Array.from({length: n}, () => [])
                 );
 
-                // Qotr asli
+                // i = j
                 for (let i = 0; i < n; i++) {
                     let word = this.sentence[i];
 
                     for (let name in this.grammar) {
                         this.grammar[name].forEach(
                             value => {
-                                if (value === word)
+                                if (value === word && !table[i][i].includes(name))
                                     table[i][i].push(name);
                             }
                         );
                     }
+                }
+
+                for (let i = 1; i < n; i++) {
+                    let x = 0;
+
+                    for (let j = i; j < n; j++) {
+                        let b = x + 1;
+
+                        for (let a = x; a < j; a++) {
+                            let combs = table[x][a].flatMap(d => table[b][j].flatMap(v => d + v));
+
+                            // Check all combinations
+                            combs.forEach(comb => {
+                                for (let gKey in this.grammar) {
+                                    this.grammar[gKey].forEach(gValue => {
+                                        if (gValue === comb && !table[x][j].includes(gKey)) {
+                                            table[x][j].push(gKey)
+                                        }
+                                    })
+                                }
+                            })
+
+                            b++;
+                        }
+
+                        x++;
+                    }
+
                 }
 
                 this.table = table;
