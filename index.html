@@ -4,24 +4,17 @@
     <meta charset="UTF-8">
     <title>Chomsky Table</title>
 
-    <style>
-        table {
-            width: 50%;
-            margin: 20px auto;
-            border-collapse: collapse;
-        }
-
-        td, th {
-            padding: 10px;
-            border: 1px solid #ccc;
-            text-align: center;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.23/dist/full.min.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
 <div id="app">
+    <div class="navbar bg-primary text-white">
+        <a class="btn btn-ghost text-xl">Chomsky</a>
+    </div>
+
     <h1>Grammar:</h1>
     <p v-for="(value, key) in grammar" :key="key">
         {{ key }} → {{ value.join(" | ") }}
