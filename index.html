@@ -32,9 +32,9 @@
     <button @click="calculate">Calculate</button>
 
     <table v-if="done">
-        <tr v-for="(row, rowIndex) in table" :key="'row-' + rowIndex">
-            <td v-for="(cell, columnIndex) in row" :key="'cell-' + columnIndex">
-                {{ cell.length > 0 ? cell.sort().join(", ") : "∅" }}
+        <tr v-for="(row, i) in table" :key="'row-' + i">
+            <td v-for="(cell, j) in row" :key="'cell-' + j">
+                {{ i <= j ? (cell.length > 0 ? cell.sort().join(", ") : "∅") : "" }}
             </td>
         </tr>
     </table>
