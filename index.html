@@ -15,22 +15,23 @@
         <a class="btn btn-ghost text-xl">Chomsky</a>
     </div>
 
-    <h1>Grammar:</h1>
-    <p v-for="(value, key) in grammar" :key="key">
-        {{ key }} → {{ value.join(" | ") }}
-    </p>
+    <div class="mx-20">
+        <h1>Grammar:</h1>
+        <p v-for="(value, key) in grammar" :key="key">
+            {{ key }} → {{ value.join(" | ") }}
+        </p>
 
-    <h1>Sentence:</h1>
-    <input v-model="sentence" type="text">
-    <button @click="calculate">Calculate</button>
+        <input v-model="sentence" type="text" placeholder="Sentence" class="input input-bordered w-3/4  input-md mr-5">
+        <button class="btn btn-primary text-white" @click="calculate">Calculate</button>
 
-    <table v-if="done">
-        <tr v-for="(row, i) in table" :key="'row-' + i">
-            <td v-for="(cell, j) in row" :key="'cell-' + j">
-                {{ i <= j ? (cell.length > 0 ? cell.sort().join(", ") : "∅") : "" }}
-            </td>
-        </tr>
-    </table>
+        <table v-if="done" class="table table-zebra table-md">
+            <tr v-for="(row, i) in table" :key="'row-' + i">
+                <td v-for="(cell, j) in row" :key="'cell-' + j">
+                    {{ i <= j ? (cell.length > 0 ? cell.sort().join(", ") : "∅") : "" }}
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 
 <script>
