@@ -16,12 +16,11 @@
     </div>
 
     <div class="mx-20">
-        <h1>Grammar:</h1>
-        <p v-for="(value, key) in grammar" :key="key">
-            {{ key }} → {{ value.join(" | ") }}
-        </p>
+        <textarea v-model="grammarInput" class="w-full textarea textarea-bordered textarea-lg" placeholder="Grammar (S => A | B | C)"
+                  rows="6"></textarea>
 
-        <input v-model="sentence" type="text" placeholder="Sentence" class="input input-bordered w-3/4  input-md mr-5">
+        <input v-model="sentence" class="input input-bordered w-3/4  input-md mr-5" placeholder="Sentence" type="text">
+
         <button class="btn btn-primary text-white" @click="calculate">Calculate</button>
 
         <table v-if="done" class="table table-zebra table-md">
@@ -40,13 +39,8 @@
     createApp({
         data() {
             return {
-                grammar: {
-                    S: ["AS", "SS", "a"],
-                    A: ["a", "b", "BA", "BB"],
-                    B: ["b", "CD"],
-                    C: ["c", "SA"],
-                    D: ["d"],
-                },
+                grammar: {},
+                grammarInput: "S => AS | SS | a\nA => a | b | BA | BB\nB => b | CD\nC => c | SA\nD => d",
                 sentence: "aabcda",
                 table: [],
                 done: false,
@@ -55,6 +49,7 @@
         methods: {
             calculate() {
                 this.done = false;
+                this.parseInput();
 
                 const n = this.sentence.length;
                 let table = Array.from(
@@ -90,7 +85,7 @@
                                 for (let gKey in this.grammar) {
                                     this.grammar[gKey].forEach(gValue => {
                                         if (gValue === comb && !table[x][j].includes(gKey)) {
-                                            table[x][j].push(gKey)
+                                            table[x][j].push(gKey);
                                         }
                                     })
                                 }
@@ -107,6 +102,17 @@
                 this.table = table;
                 this.done = true;
             },
+            parseInput() {
+                const grammar = {};
+                const lines = this.grammarInput.trim().split("\n");
+
+                lines.forEach(line => {
+                    const [key, values] = line.split("=>").map(part => part.trim());
+                    grammar[key] = values.split("|").map(value => value.trim());
+                });
+
+                this.grammar = grammar;
+            }
         },
     }).mount("#app");
 </script>
