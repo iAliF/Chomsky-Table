@@ -16,20 +16,31 @@
     </div>
 
     <div class="mx-20">
-        <textarea v-model="grammarInput" class="w-full textarea textarea-bordered textarea-lg" placeholder="Grammar (S => A | B | C)"
+        <textarea v-model="grammarInput" class="w-full textarea textarea-bordered textarea-lg"
+                  placeholder="Grammar (S => A | B | C)"
                   rows="6"></textarea>
 
         <input v-model="sentence" class="input input-bordered w-3/4  input-md mr-5" placeholder="Sentence" type="text">
 
         <button class="btn btn-primary text-white" @click="calculate">Calculate</button>
 
-        <table v-if="done" class="table table-zebra table-md">
-            <tr v-for="(row, i) in table" :key="'row-' + i">
-                <td v-for="(cell, j) in row" :key="'cell-' + j">
-                    {{ i <= j ? (cell.length > 0 ? cell.sort().join(", ") : "∅") : "" }}
-                </td>
-            </tr>
-        </table>
+        <div v-if="done">
+            <table class="table table-zebra table-md">
+                <tr v-for="(row, i) in table" :key="'row-' + i">
+                    <td v-for="(cell, j) in row" :key="'cell-' + j">
+                        {{ i <= j ? (cell.length > 0 ? cell.sort().join(", ") : "∅") : "" }}
+                    </td>
+                </tr>
+            </table>
+
+            <div v-if="isValid" class="alert alert-success">
+                <span>The sentence belongs to the language defined by the grammar.</span>
+            </div>
+            <div v-else class="alert alert-error">
+                <span>The sentence does not belong to the language defined by the grammar.</span>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -44,6 +55,7 @@
                 sentence: "aabcda",
                 table: [],
                 done: false,
+                isValid: false
             };
         },
         methods: {
@@ -100,6 +112,7 @@
                 }
 
                 this.table = table;
+                this.isValid = table[0][n - 1].includes("S"); // True if table[1][n] includes 'S'
                 this.done = true;
             },
             parseInput() {
