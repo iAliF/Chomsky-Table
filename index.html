@@ -16,13 +16,26 @@
     </div>
 
     <div class="mx-20">
-        <textarea v-model="grammarInput" class="w-full textarea textarea-bordered textarea-lg"
+        <textarea v-model="grammarInput"
+                  :class="{'textarea-error': !isGrammarValid}"
+                  class="w-full textarea textarea-bordered textarea-lg"
                   placeholder="Grammar (S => A | B | C)"
-                  rows="6"></textarea>
+                  rows="6"
+                  @input="validateGrammar"></textarea>
 
-        <input v-model="sentence" class="input input-bordered w-3/4  input-md mr-5" placeholder="Sentence" type="text">
+        <input v-model="sentence"
+               :class="{'input-error': !isSentenceValid}"
+               class="input input-bordered w-3/4 input-md mr-5"
+               placeholder="Sentence"
+               type="text"
+               @input="validateSentence">
 
-        <button class="btn btn-primary text-white" @click="calculate">Calculate</button>
+        <button
+                :class="{'btn-disabled': !(isGrammarValid && isSentenceValid)}"
+                class="btn btn-primary text-white"
+                @click="calculate">
+            Calculate
+        </button>
 
         <div v-if="done">
             <table class="table table-zebra table-md">
@@ -55,7 +68,9 @@
                 sentence: "aabcda",
                 table: [],
                 done: false,
-                isValid: false
+                isValid: false,
+                isGrammarValid: true,
+                isSentenceValid: true,
             };
         },
         methods: {
@@ -125,7 +140,22 @@
                 });
 
                 this.grammar = grammar;
-            }
+            },
+            validateGrammar() {
+                this.isGrammarValid = true;
+                const lines = this.grammarInput.trim().split("\n");
+                const checkPattern = /^[A-Z]\s*=>\s*([\w| ]+)$/;
+
+                for (const line of lines) {
+                    if (!checkPattern.test(line.trim())) {
+                        this.isGrammarValid = false;
+                        break;
+                    }
+                }
+            },
+            validateSentence() {
+                this.isSentenceValid = /^[a-z0-9]*$/.test(this.sentence);
+            },
         },
     }).mount("#app");
 </script>
