@@ -12,32 +12,34 @@
 
 <div id="app">
     <div class="navbar bg-primary text-white">
-        <a class="btn btn-ghost text-xl">Chomsky</a>
+        <a class="btn btn-ghost text-xl">Chomsky Table</a>
     </div>
 
-    <div class="mx-20">
+    <div class="md: mx-10 lg:mx-60 mt-5">
         <textarea v-model="grammarInput"
                   :class="{'textarea-error': !isGrammarValid}"
                   class="w-full textarea textarea-bordered textarea-lg"
                   placeholder="Grammar (S => A | B | C)"
-                  rows="6"
+                  rows="5"
                   @input="validateGrammar"></textarea>
 
-        <input v-model="sentence"
-               :class="{'input-error': !isSentenceValid}"
-               class="input input-bordered w-3/4 input-md mr-5"
-               placeholder="Sentence"
-               type="text"
-               @input="validateSentence">
+        <div class="flex gap-2 mt-2">
+            <input v-model="sentence"
+                   :class="{'input-error': !isSentenceValid}"
+                   class="input input-bordered input-md flex-grow"
+                   placeholder="Sentence"
+                   type="text"
+                   @input="validateSentence">
 
-        <button
-                :class="{'btn-disabled': !(isGrammarValid && isSentenceValid)}"
-                class="btn btn-primary text-white"
-                @click="calculate">
-            Calculate
-        </button>
+            <button
+                    :class="{'btn-disabled': !(isGrammarValid && isSentenceValid)}"
+                    class="btn btn-primary text-white"
+                    @click="calculate">
+                Calculate
+            </button>
+        </div>
 
-        <div v-if="done">
+        <div v-if="done" class="mt-4">
             <table class="table table-zebra table-md">
                 <tr v-for="(row, i) in table" :key="'row-' + i">
                     <td v-for="(cell, j) in row" :key="'cell-' + j">
@@ -46,11 +48,13 @@
                 </tr>
             </table>
 
-            <div v-if="isValid" class="alert alert-success">
-                <span>The sentence belongs to the language defined by the grammar.</span>
-            </div>
-            <div v-else class="alert alert-error">
-                <span>The sentence does not belong to the language defined by the grammar.</span>
+            <div class="mt-2">
+                <div v-if="isValid" class="alert alert-success">
+                    <span>The sentence belongs to the language defined by the grammar.</span>
+                </div>
+                <div v-else class="alert alert-error">
+                    <span>The sentence does not belong to the language defined by the grammar.</span>
+                </div>
             </div>
         </div>
 
