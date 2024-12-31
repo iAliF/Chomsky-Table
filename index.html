@@ -42,7 +42,8 @@
         <div v-if="done" class="mt-4">
             <table class="table table-zebra table-md">
                 <tr v-for="(row, i) in table" :key="'row-' + i">
-                    <td v-for="(cell, j) in row" :key="'cell-' + j">
+                    <td v-for="(cell, j) in row" :key="'cell-' + j"
+                        :class="{'bg-yellow-300': cell.includes('S')}">
                         {{ i <= j ? (cell.length > 0 ? cell.sort().join(", ") : "∅") : "" }}
                     </td>
                 </tr>
