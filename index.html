@@ -6,13 +6,21 @@
 
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.23/dist/full.min.css" rel="stylesheet" type="text/css"/>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href=" https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css " rel="stylesheet">
 </head>
 <body>
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
 <div id="app">
     <div class="navbar bg-primary text-white">
-        <a class="btn btn-ghost text-xl">Chomsky Table</a>
+        <div class="flex-1">
+            <a class="btn btn-ghost text-2xl font-bold">Chomsky Table</a>
+        </div>
+        <div class="flex-none">
+            <button class="btn btn-circle btn-primary btn-lg text-4xl">
+                <a class="mdi mdi-github text-white" href="https://github.com/iAliF/Chomsky-Table" target="_blank"></a>
+            </button>
+        </div>
     </div>
 
     <div class="md: mx-10 lg:mx-60 mt-5">
@@ -69,8 +77,8 @@
         data() {
             return {
                 grammar: {},
-                grammarInput: "S => AS | SS | a\nA => a | b | BA | BB\nB => b | CD\nC => c | SA\nD => d",
-                sentence: "aabcda",
+                grammarInput: "",
+                sentence: "",
                 table: [],
                 done: false,
                 isValid: false,
